@@ -1,0 +1,17 @@
+import express from 'express'
+import { create, getAll, remove, update, findOne } from './product.controller'
+import { authMiddleware, isAdmin } from '~/middleware/auth.middleware'
+import 'express-async-errors'
+
+const router = express.Router()
+
+router.get('/', getAll)
+router.get('/:id', findOne)
+
+router.use([authMiddleware, isAdmin])
+
+router.post('/', create)
+router.patch('/:id', update)
+router.delete('/:id', remove)
+
+export default router
