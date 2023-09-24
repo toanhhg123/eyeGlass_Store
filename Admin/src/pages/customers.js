@@ -23,6 +23,7 @@ import { CustomersTable } from "src/sections/customer/customers-table";
 import { getAllUser } from "src/services/user.service";
 import FormUser from "src/sections/customer/Form-Customer";
 import Loading from "src/components/loading";
+import FormChangePassword from "src/sections/customer/form-changePassword";
 
 const now = new Date();
 
@@ -46,6 +47,13 @@ const Page = () => {
       }
     });
   }, [fetch, pageIndex, search]);
+
+  const showFormChangePassword = (user) => {
+    setForm({
+      type: "changePassword",
+      dataForm: user,
+    });
+  };
 
   useEffect(() => {
     getInitUser();
@@ -83,8 +91,12 @@ const Page = () => {
           >
             <ChevronRightIcon width={20} />
           </Box>
-          {form.dataForm && (
+          {form.dataForm && (form.type === "create" || form.type === "edit") && (
             <FormUser user={form.dataForm} type={form.type} onSubmitSuccess={getInitUser} />
+          )}
+
+          {form.dataForm && form.type === "changePassword" && (
+            <FormChangePassword user={form.dataForm} onSubmitSuccess={getInitUser} />
           )}
         </SwipeableDrawer>
 
@@ -144,6 +156,7 @@ const Page = () => {
               onSelectOne={customersSelection.handleSelectOne}
               page={pageIndex}
               selected={customersSelection.selected}
+              onClickChangePassword={showFormChangePassword}
               onClickActionEdit={({ password, __v, ...user }) =>
                 setForm({ type: "edit", dataForm: user })
               }

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import { LoadingButton } from "@mui/lab";
 import {
   Alert,
   Box,
@@ -7,21 +7,17 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  FormControl,
+  Divider,
   Unstable_Grid2 as Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   Snackbar,
   TextField,
-  Divider,
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
+import { useCallback, useState } from "react";
 import useFetch from "src/hooks/useFetch";
-import { createuser, deleteUser, updateUser } from "src/services/user.service";
+import { createShipping, updateShipping } from "src/services/shipping.service";
 
-const FormUser = ({ user, onSubmitSuccess, type }) => {
-  const [values, setValues] = useState(user);
+const FormShipping = ({ shipping, onSubmitSuccess, type }) => {
+  const [values, setValues] = useState(shipping);
   const [snackBar, setSnackBar] = useState();
   const { fetch, status } = useFetch();
 
@@ -36,7 +32,7 @@ const FormUser = ({ user, onSubmitSuccess, type }) => {
     async (event) => {
       event.preventDefault();
       const { res, error } = await fetch(() =>
-        type === "create" ? createuser(values) : updateUser(values._id, values),
+        type === "create" ? createShipping(values) : updateShipping(values._id, values),
       );
       if (res) {
         setSnackBar({
@@ -51,13 +47,12 @@ const FormUser = ({ user, onSubmitSuccess, type }) => {
         });
       }
     },
-
     [fetch, onSubmitSuccess, type, values],
   );
 
   const handleDelete = useCallback(
     async (id) => {
-      const { res, error } = await fetch(() => deleteUser(id));
+      const res = "1";
       if (res) {
         setSnackBar({
           type: "success",
@@ -72,7 +67,7 @@ const FormUser = ({ user, onSubmitSuccess, type }) => {
       }
     },
 
-    [fetch, onSubmitSuccess],
+    [onSubmitSuccess],
   );
 
   const handleCloseSnackBar = () => {
@@ -100,26 +95,6 @@ const FormUser = ({ user, onSubmitSuccess, type }) => {
           <Box sx={{ m: -1.5 }}>
             <Grid container spacing={3}>
               {Object.keys(values).map((key) => {
-                if (key === "role") {
-                  return (
-                    <Grid key={key} xs={12} md={6}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">{key}</InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          label={key}
-                          name={key}
-                          onChange={handleChange}
-                          required
-                          value={values[key]}
-                        >
-                          <MenuItem value={"user"}>User</MenuItem>
-                          <MenuItem value={"admin"}>Admin</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  );
-                }
                 return (
                   <Grid key={key} xs={12} md={6}>
                     <TextField
@@ -153,4 +128,4 @@ const FormUser = ({ user, onSubmitSuccess, type }) => {
   );
 };
 
-export default FormUser;
+export default FormShipping;

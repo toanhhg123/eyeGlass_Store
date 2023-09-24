@@ -9,35 +9,35 @@ import { Box, Button, Container, Stack, SvgIcon, SwipeableDrawer, Typography } f
 import Loading from "src/components/loading";
 import useFetch from "src/hooks/useFetch";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { TableBrand } from "src/sections/brand/brand-table";
-import FormCategory from "src/sections/category/FormCategory";
 import { CustomersSearch } from "src/sections/customer/customers-search";
-import { getAllCategory } from "src/services/product.service";
+import FormShipping from "src/sections/shipping/formShipping";
+import { TableShipping } from "src/sections/shipping/shipping-table";
+import { getAllShipping as getShippings } from "src/services/shipping.service";
 
 const now = new Date();
 
 const Page = () => {
-  const [categories, setCategories] = useState([]);
+  const [shippings, setShippings] = useState([]);
   const [form, setForm] = useState({});
 
   const { fetch, status } = useFetch();
 
-  const getInitCategories = useCallback(() => {
-    fetch(getAllCategory).then(({ res, error }) => {
+  const getAllShipping = useCallback(() => {
+    fetch(getShippings).then(({ res, error }) => {
       if (res) {
-        setCategories(res.data.data);
+        setShippings(res.data.data);
       }
     });
   }, [fetch]);
 
   useEffect(() => {
-    getInitCategories();
-  }, [getInitCategories]);
+    getAllShipping();
+  }, [getAllShipping]);
 
   return (
     <>
       <Head>
-        <title>Danh mục</title>
+        <title>Quản lí dơn vận</title>
       </Head>
       <Box
         component="main"
@@ -67,10 +67,10 @@ const Page = () => {
             <ChevronRightIcon width={20} />
           </Box>
           {form.dataForm && (
-            <FormCategory
-              brand={form.dataForm}
+            <FormShipping
+              shipping={form.dataForm}
               type={form.type}
-              onSubmitSuccess={getInitCategories}
+              onSubmitSuccess={getAllShipping}
             />
           )}
         </SwipeableDrawer>
@@ -79,7 +79,7 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Quản lí danh mục</Typography>
+                <Typography variant="h4">Quản lí trạng thái đơn hàng</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
                   <Button
                     color="inherit"
@@ -105,7 +105,7 @@ const Page = () => {
               </Stack>
               <div>
                 <Button
-                  onClick={() => setForm({ type: "create", dataForm: initCategory })}
+                  onClick={() => setForm({ type: "create", dataForm: initUser })}
                   startIcon={
                     <SvgIcon fontSize="small">
                       <PlusIcon />
@@ -120,11 +120,9 @@ const Page = () => {
             <CustomersSearch />
             {status.loading && <Loading />}
 
-            <TableBrand
-              items={categories}
-              onClickActionEdit={({ __v, ...category }) =>
-                setForm({ type: "edit", dataForm: category })
-              }
+            <TableShipping
+              items={shippings}
+              onClickActionEdit={({ __v, ...brand }) => setForm({ type: "edit", dataForm: brand })}
             />
           </Stack>
         </Container>
@@ -135,8 +133,8 @@ const Page = () => {
 
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-const initCategory = {
-  name: "",
+const initUser = {
+  status: "",
   desc: "",
 };
 

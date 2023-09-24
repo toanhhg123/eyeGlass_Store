@@ -5,6 +5,8 @@ import UserIcon from "@heroicons/react/24/solid/UserIcon";
 import UsersIcon from "@heroicons/react/24/solid/UsersIcon";
 import Bars3Icon from "@heroicons/react/24/solid/Bars3Icon";
 import ComputerDesktopIcon from "@heroicons/react/24/solid/ComputerDesktopIcon";
+import ClipboardDocumentCheckIcon from "@heroicons/react/24/solid/ClipboardDocumentCheckIcon";
+import ShoppingCartIcon from "@heroicons/react/24/solid/ShoppingCartIcon";
 
 import { SvgIcon } from "@mui/material";
 
@@ -24,15 +26,6 @@ export const items = [
     icon: (
       <SvgIcon fontSize="small">
         <UsersIcon />
-      </SvgIcon>
-    ),
-  },
-  {
-    title: "Đơn Hàng",
-    path: "/order",
-    icon: (
-      <SvgIcon fontSize="small">
-        <ShoppingBagIcon />
       </SvgIcon>
     ),
   },
@@ -69,6 +62,24 @@ export const items = [
     icon: (
       <SvgIcon fontSize="small">
         <ComputerDesktopIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    title: "Shipping",
+    path: "/shipping",
+    icon: (
+      <SvgIcon fontSize="small">
+        <ClipboardDocumentCheckIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    title: "Đơn Hàng",
+    path: "/order",
+    icon: (
+      <SvgIcon fontSize="small">
+        <ShoppingCartIcon />
       </SvgIcon>
     ),
   },

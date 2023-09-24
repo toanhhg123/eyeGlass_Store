@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import { Scrollbar } from "src/components/scrollbar";
 import { getInitials } from "src/utils/get-initials";
 import PencilIcon from "@heroicons/react/24/solid/PencilIcon";
+import LockClosedIcon from "@heroicons/react/24/solid/LockClosedIcon";
 
 export const CustomersTable = (props) => {
   const {
@@ -28,6 +29,7 @@ export const CustomersTable = (props) => {
     onSelectOne,
     selected = [],
     onClickActionEdit,
+    onClickChangePassword,
   } = props;
 
   const selectedSome = selected.length > 0 && selected.length < items.length;
@@ -87,7 +89,7 @@ export const CustomersTable = (props) => {
                     <TableCell>{customer.email}</TableCell>
                     <TableCell>{customer.role}</TableCell>
                     <TableCell>{customer.address}</TableCell>
-                    <TableCell>
+                    <TableCell sx={{ display: "flex", gap: 1 }}>
                       <Button
                         startIcon={
                           <SvgIcon color="action" fontSize="small">
@@ -100,7 +102,22 @@ export const CustomersTable = (props) => {
                         color="info"
                         onClick={() => onClickActionEdit(customer)}
                       >
-                        Edit
+                        chỉnh sửa
+                      </Button>
+
+                      <Button
+                        startIcon={
+                          <SvgIcon color="action" fontSize="small">
+                            <LockClosedIcon />
+                          </SvgIcon>
+                        }
+                        sx={{ borderRadius: "3px" }}
+                        size="small"
+                        variant="outlined"
+                        color="info"
+                        onClick={() => onClickChangePassword(customer)}
+                      >
+                        mật khẩu
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -127,4 +144,5 @@ CustomersTable.propTypes = {
   rowsPerPage: PropTypes.number,
   selected: PropTypes.array,
   onClickActionEdit: PropTypes.func,
+  onClickChangePassword: PropTypes.func,
 };
