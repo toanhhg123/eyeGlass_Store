@@ -5,15 +5,13 @@ services:
      context: ./admin
     container_name: admin
     command: npm run start
-    platform: linux/arm64
     ports:
       - "3002:3000"
-    image: toanhhg123/eyeglass_admin:linux
+    image: toanhhg123/eyeglass_admin:linux-v1
   server:
     build: ./server
-    platform: linux/arm64
     container_name: server
     command: npm start
     ports:
       - "5151:5151"
-    image: toanhhg123/eyeglass_server:linux
+    image: toanhhg123/eyeglass_server:linux-v1

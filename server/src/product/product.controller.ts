@@ -18,7 +18,7 @@ export const getAll = async (req: Request<unknown, unknown, ProductDocument>, re
   const categoryId = query.categoryId
   const brandId = query.brandId
 
-  const limit = 10
+  const limit = 12
 
   const filterQuery: FilterQuery<ProductDocument> = {
     name: { $regex: search, $options: 'i' }
