@@ -2,16 +2,16 @@ version: '3.8'
 services:
   web:   
     build:  
-     context: ./admin
+     context: ./Admin
     container_name: admin
     command: npm run start
     ports:
       - "3002:3000"
-    image: toanhhg123/eyeglass_admin:linux-v1
+    image: toanhhg123/eyeglass_admin:linux-v2
   server:
     build: ./server
     container_name: server
     command: npm start
     ports:
       - "5151:5151"
-    image: toanhhg123/eyeglass_server:linux-v1
+    image: toanhhg123/eyeglass_server:linux-v2

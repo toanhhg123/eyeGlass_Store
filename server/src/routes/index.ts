@@ -6,6 +6,7 @@ import brandRouter from '~/brand/brand.route'
 import productRouter from '~/product/product.route'
 import shippingRouter from '~/shipping/shipping.route'
 import orderRouter from '~/order/order.route'
+import blogRouter from '~/blog/blog.route'
 
 import seederRouter from '~/seeders'
 
@@ -18,6 +19,7 @@ router.use('/brand', brandRouter)
 router.use('/product', productRouter)
 router.use('/shipping', shippingRouter)
 router.use('/order', orderRouter)
+router.use('/blog', blogRouter)
 
 router.use('/seeder', seederRouter)
 
