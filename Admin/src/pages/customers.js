@@ -1,8 +1,5 @@
-import ChevronRightIcon from "@heroicons/react/24/solid/ArrowLeftIcon";
-import Head from "next/head";
-import { useCallback, useEffect, useState } from "react";
-
 import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
+import ChevronRightIcon from "@heroicons/react/24/solid/ArrowLeftIcon";
 import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import {
@@ -15,15 +12,18 @@ import {
   SwipeableDrawer,
   Typography,
 } from "@mui/material";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
+import Loading from "src/components/loading";
 import { useSelection } from "src/hooks/use-selection";
 import useFetch from "src/hooks/useFetch";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
+import FormUser from "src/sections/customer/Form-Customer";
 import { CustomersSearch } from "src/sections/customer/customers-search";
 import { CustomersTable } from "src/sections/customer/customers-table";
-import { getAllUser } from "src/services/user.service";
-import FormUser from "src/sections/customer/Form-Customer";
-import Loading from "src/components/loading";
 import FormChangePassword from "src/sections/customer/form-changePassword";
+import { getAllUser } from "src/services/user.service";
 
 const now = new Date();
 
@@ -31,10 +31,11 @@ const Page = () => {
   const customersSelection = useSelection("");
   const [userPage, setUserPage] = useState(initUserPage);
   const [form, setForm] = useState({});
-
   const { fetch, status } = useFetch();
-  let pageIndex = 1;
-  let search = "";
+
+  const router = useRouter();
+  const pageIndex = Number(router.query?.pageIndex || 1);
+  const search = router.query?.search || "";
 
   const handlePageChange = useCallback((event, value) => {}, []);
 
@@ -47,6 +48,26 @@ const Page = () => {
       }
     });
   }, [fetch, pageIndex, search]);
+
+  const handleChangePage = (event, page) => {
+    router.push({
+      pathname: router.pathname,
+      query: {
+        pageIndex: page,
+        search,
+      },
+    });
+  };
+
+  const handleSearch = (search) => {
+    router.push({
+      pathname: router.pathname,
+      query: {
+        pageIndex: pageIndex,
+        search,
+      },
+    });
+  };
 
   const showFormChangePassword = (user) => {
     setForm({
@@ -142,7 +163,7 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <CustomersSearch />
+            <CustomersSearch onSubmit={handleSearch} />
             {status.loading && <Loading />}
 
             <CustomersTable
@@ -161,7 +182,11 @@ const Page = () => {
                 setForm({ type: "edit", dataForm: user })
               }
             />
-            <Pagination count={Math.ceil(userPage.limit / 10)} size="small" />
+            <Pagination
+              onChange={handleChangePage}
+              count={Math.ceil(userPage.total / userPage.limit)}
+              size="small"
+            />
           </Stack>
         </Container>
       </Box>
@@ -174,8 +199,8 @@ Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 const initUserPage = {
   search: "",
   users: [],
-  pageIndex: null,
-  limit: 0,
+  pageIndex: 1,
+  limit: 1,
   total: 0,
 };
 

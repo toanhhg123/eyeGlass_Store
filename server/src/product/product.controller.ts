@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { PageQuery, successResponse } from '~/types'
 import Product, { ProductDocument } from './product.model'
 import { FilterQuery } from 'mongoose'
+import Order from '~/order/order.model'
 
 export const create = async (req: Request<unknown, unknown, ProductDocument>, res: Response) => {
   const record = new Product(req.body)
@@ -58,6 +59,9 @@ export const update = async (req: Request<{ id: string }, unknown, ProductDocume
 
 export const remove = async (req: Request<{ id: string }>, res: Response) => {
   const record = await Product.findByIdAndDelete(req.params.id)
+  Order.deleteMany({
+    product: req.params.id
+  })
 
   return res.status(200).json(successResponse(record))
 }

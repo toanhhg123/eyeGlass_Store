@@ -25,6 +25,7 @@ import {
 } from "src/services/product.service";
 import useFetch from "src/hooks/useFetch";
 import { LoadingButton } from "@mui/lab";
+import { removeProduct } from "../services/product.service";
 
 const FormProduct = ({ product, onSubmitSuccess, type }) => {
   const [values, setValues] = useState({
@@ -91,6 +92,25 @@ const FormProduct = ({ product, onSubmitSuccess, type }) => {
 
     [fetch, onSubmitSuccess, type, values],
   );
+
+  const handleDelete = async () => {
+    const { error } = await fetch(() => removeProduct(values._id));
+
+    if (error) {
+      setSnackBar({
+        type: "error",
+        message: error,
+      });
+      return;
+    }
+
+    setSnackBar({
+      type: "success",
+      message: "xoá thành công",
+    });
+
+    onSubmitSuccess();
+  };
 
   useEffect(() => {
     getAllBrand().then(({ data }) => {
@@ -342,6 +362,17 @@ const FormProduct = ({ product, onSubmitSuccess, type }) => {
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: "flex-end" }}>
+          {type === "edit" && (
+            <LoadingButton
+              loading={status.loading}
+              onClick={handleDelete}
+              variant="contained"
+              color="error"
+            >
+              delete
+            </LoadingButton>
+          )}
+
           <LoadingButton loading={status.loading} type="submit" variant="contained">
             Save details
           </LoadingButton>

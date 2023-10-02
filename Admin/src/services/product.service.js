@@ -19,3 +19,7 @@ export const getAllBrand = () => {
 export const getAllCategory = () => {
   return api.get("/category");
 };
+
+export const removeProduct = (id) => {
+  return api.delete(`/product/${id}`);
+};

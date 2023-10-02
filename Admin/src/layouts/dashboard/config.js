@@ -9,6 +9,7 @@ import ClipboardDocumentCheckIcon from "@heroicons/react/24/solid/ClipboardDocum
 import ShoppingCartIcon from "@heroicons/react/24/solid/ShoppingCartIcon";
 
 import { SvgIcon } from "@mui/material";
+import PencilIcon from "@heroicons/react/24/solid/PencilIcon";
 
 export const items = [
   {
@@ -80,6 +81,16 @@ export const items = [
     icon: (
       <SvgIcon fontSize="small">
         <ShoppingCartIcon />
+      </SvgIcon>
+    ),
+  },
+
+  {
+    title: "Bài viết",
+    path: "/blog",
+    icon: (
+      <SvgIcon fontSize="small">
+        <PencilIcon />
       </SvgIcon>
     ),
   },

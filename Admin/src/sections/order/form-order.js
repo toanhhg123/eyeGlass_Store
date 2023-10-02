@@ -19,6 +19,7 @@ import { useCallback, useEffect, useState } from "react";
 import useFetch from "src/hooks/useFetch";
 import { updateOrder } from "src/services/order.service";
 import { getAllShipping } from "src/services/shipping.service";
+import { deleteOrder } from "../../services/order.service";
 
 const FormOrder = ({ order, onSubmitSuccess }) => {
   const [values, setValues] = useState({
@@ -67,6 +68,27 @@ const FormOrder = ({ order, onSubmitSuccess }) => {
 
     [fetch, onSubmitSuccess, values],
   );
+
+  const handleDelete = async () => {
+    if (order._id) {
+      const { error } = await fetch(() => deleteOrder(values._id));
+
+      if (error) {
+        setSnackBar({
+          type: "error",
+          message: error,
+        });
+        return;
+      }
+
+      setSnackBar({
+        type: "success",
+        message: "delete thành công",
+      });
+
+      onSubmitSuccess();
+    }
+  };
 
   useEffect(() => {
     getAllShipping().then(({ data }) => {
@@ -182,6 +204,15 @@ const FormOrder = ({ order, onSubmitSuccess }) => {
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: "flex-end" }}>
+          <LoadingButton
+            loading={status.loading}
+            onClick={handleDelete}
+            variant="contained"
+            color="error"
+          >
+            delete
+          </LoadingButton>
+
           <LoadingButton loading={status.loading} type="submit" variant="contained">
             Save details
           </LoadingButton>

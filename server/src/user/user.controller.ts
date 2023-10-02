@@ -13,10 +13,10 @@ export const getAll = async (req: Request<unknown, unknown, UserDocument>, res: 
   const query = req.query as PageQuery
 
   const search = query.search ?? ''
-  const pageIndex = Number(query.pageIndex) ?? 1
+  const pageIndex = Number(query.pageIndex) || 1
   const limit = 12
 
-  const users = await User.find({
+  const users = User.find({
     $or: [
       {
         user_name: { $regex: search, $options: 'i' },
@@ -27,20 +27,22 @@ export const getAll = async (req: Request<unknown, unknown, UserDocument>, res: 
     .skip((pageIndex - 1) * limit)
     .limit(limit)
 
+  const total = User.count({
+    $or: [
+      {
+        user_name: { $regex: search, $options: 'i' },
+        email: { $regex: search, $options: 'i' }
+      }
+    ]
+  })
+
   return res.json(
     successResponse({
       search,
-      users,
+      users: await users,
       pageIndex,
       limit,
-      total: await User.count({
-        $or: [
-          {
-            user_name: { $regex: search, $options: 'i' },
-            email: { $regex: search, $options: 'i' }
-          }
-        ]
-      })
+      total: await total
     })
   )
 }

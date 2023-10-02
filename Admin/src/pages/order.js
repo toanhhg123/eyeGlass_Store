@@ -30,6 +30,10 @@ const Page = () => {
     });
   }, [fetch]);
 
+  const handleSubmitSuccess = () => {
+    getInitOrder();
+  };
+
   useEffect(() => {
     getInitOrder();
   }, [getInitOrder]);
@@ -67,7 +71,11 @@ const Page = () => {
             <ChevronRightIcon width={20} />
           </Box>
           {form.dataForm && (
-            <FormOrder order={form.dataForm} type={form.type} onSubmitSuccess={getInitOrder} />
+            <FormOrder
+              order={form.dataForm}
+              type={form.type}
+              onSubmitSuccess={handleSubmitSuccess}
+            />
           )}
         </SwipeableDrawer>
 

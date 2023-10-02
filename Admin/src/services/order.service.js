@@ -11,3 +11,7 @@ export const createOrder = (Order) => {
 export const updateOrder = (id, Order) => {
   return api.patch(`/Order/${id}`, Order);
 };
+
+export const deleteOrder = (id) => {
+  return api.delete(`/Order/${id}`);
+};

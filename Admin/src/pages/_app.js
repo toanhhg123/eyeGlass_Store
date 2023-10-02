@@ -29,6 +29,7 @@ const App = (props) => {
       <Head>
         <title>Devias Kit</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta charSet="utf-8" />
       </Head>
 
       <LocalizationProvider dateAdapter={AdapterDateFns}>

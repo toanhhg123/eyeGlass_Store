@@ -2,33 +2,30 @@ import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIc
 import ChevronRightIcon from "@heroicons/react/24/solid/ArrowLeftIcon";
 import ArrowPathIcon from "@heroicons/react/24/solid/ArrowPathIcon";
 import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
-import { useRouter } from "next/router";
-import Head from "next/head";
-
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import {
   Box,
   Button,
   Container,
   Unstable_Grid2 as Grid,
-  Pagination,
   Stack,
   SvgIcon,
   SwipeableDrawer,
   Typography,
 } from "@mui/material";
+import Head from "next/head";
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import FormProduct from "src/components/FormProduct";
-import FormProductUpload from "src/components/FormUploadProduct";
 import Loading from "src/components/loading";
 import useFetch from "src/hooks/useFetch";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { ProductCard } from "src/sections/companies/product-card";
-import { getAllProduct } from "src/services/product.service";
-import { CustomersSearch } from "../sections/customer/customers-search";
+import FormUploadBlog from "../sections/blog/FormUploadBlog";
+import { BlogCard } from "../sections/blog/blog-card";
+import FormBlog from "../sections/blog/form-blog";
+import { getAllBlog } from "../services/blog";
 
 const Page = () => {
-  const [productPage, setProductPage] = useState(initProductPage);
+  const [blogs, setBlogs] = useState([]);
   const { fetch, status } = useFetch();
   const [form, setForm] = useState({});
 
@@ -41,44 +38,25 @@ const Page = () => {
   };
 
   const handleSubmitSuccess = () => {
-    getProductsInit();
+    setForm({});
+    getBlogInit();
   };
 
-  const getProductsInit = useCallback(() => {
-    fetch(() => getAllProduct({ pageIndex, search })).then(({ res, error }) => {
+  const getBlogInit = useCallback(() => {
+    fetch(() => getAllBlog()).then(({ res, error }) => {
       if (res) {
-        setProductPage(res.data.data);
+        setBlogs(res.data.data);
       }
     });
-  }, [fetch, pageIndex, search]);
+  }, [fetch]);
 
   const handleShowFormUpload = (product) => {
     setForm({ type: "edit", dataUpload: product });
   };
 
-  const handleChangePage = (event, page) => {
-    router.push({
-      pathname: router.pathname,
-      query: {
-        pageIndex: page,
-        search,
-      },
-    });
-  };
-
-  const handleSearch = (search) => {
-    router.push({
-      pathname: router.pathname,
-      query: {
-        pageIndex: pageIndex,
-        search,
-      },
-    });
-  };
-
   useEffect(() => {
-    getProductsInit();
-  }, [getProductsInit]);
+    getBlogInit();
+  }, [getBlogInit]);
 
   return (
     <>
@@ -103,17 +81,13 @@ const Page = () => {
           <ChevronRightIcon width={20} />
         </Box>
         {form.dataForm && (
-          <FormProduct
-            onSubmitSuccess={handleSubmitSuccess}
-            type={form.type}
-            product={form.dataForm}
-          />
+          <FormBlog onSubmitSuccess={handleSubmitSuccess} type={form.type} blog={form.dataForm} />
         )}
 
-        {form.dataUpload && <FormProductUpload product={form.dataUpload} />}
+        {form.dataUpload && <FormUploadBlog blog={form.dataUpload} />}
       </SwipeableDrawer>
       <Head>
-        <title>Companies | Devias Kit</title>
+        <title>Blog | Devias Kit</title>
       </Head>
       <Box
         component="main"
@@ -126,7 +100,7 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Companies</Typography>
+                <Typography variant="h4">Blog</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
                   <Button
                     color="inherit"
@@ -152,7 +126,7 @@ const Page = () => {
               </Stack>
               <div>
                 <Button
-                  onClick={getProductsInit}
+                  onClick={getBlogInit}
                   startIcon={
                     <SvgIcon fontSize="small">
                       <ArrowPathIcon />
@@ -164,7 +138,7 @@ const Page = () => {
                   Reload
                 </Button>
                 <Button
-                  onClick={() => setForm({ type: "create", dataForm: initProduct })}
+                  onClick={() => setForm({ type: "create", dataForm: initBlog })}
                   startIcon={
                     <SvgIcon fontSize="small">
                       <PlusIcon />
@@ -176,31 +150,18 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <CustomersSearch onSubmit={handleSearch} />
             {status.loading && <Loading />}
             <Grid container spacing={3}>
-              {productPage?.record?.map((product) => (
-                <Grid xs={12} md={6} lg={4} key={product._id}>
-                  <ProductCard
+              {blogs.map((blog) => (
+                <Grid xs={12} md={6} lg={4} key={blog._id}>
+                  <BlogCard
                     onClickupLoad={handleShowFormUpload}
                     onClickCard={handleOnClickCard}
-                    product={product}
+                    blog={blog}
                   />
                 </Grid>
               ))}
             </Grid>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <Pagination
-                onChange={handleChangePage}
-                count={Math.ceil(productPage.total / productPage.limit)}
-                size="small"
-              />
-            </Box>
           </Stack>
         </Container>
       </Box>
@@ -212,25 +173,8 @@ Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
 
-const initProductPage = {
-  search: "",
-  record: [],
-  pageIndex: 1,
-  limit: 12,
-  total: 1,
-};
-
-const initProduct = {
-  name: "",
-  price: 0,
-  rate: 0,
-  colors: [],
-  sizes: [],
-  brand: "",
-  category: "",
-  quantity: 0,
-  status: "default",
-  discount: 0,
-  images: [],
-  desc: "",
+const initBlog = {
+  title: "",
+  subtitle: "",
+  content: "",
 };

@@ -1,7 +1,7 @@
 import api from "src/config/axios";
 
 export const getAllUser = (params) => {
-  return api.get("/user", params);
+  return api.get("/user", { params });
 };
 
 export const createuser = (body) => {
