@@ -18,15 +18,19 @@ export const getAll = async (req: Request<unknown, unknown, ProductDocument>, re
   const pageIndex = Number(query.pageIndex) || 1
   const categoryId = query.categoryId
   const brandId = query.brandId
+  const minPrice = Number(query.minPrice) || 0
+  const maxPrice = Number(query.maxPrice) || null
 
   const limit = 12
 
   const filterQuery: FilterQuery<ProductDocument> = {
-    name: { $regex: search, $options: 'i' }
+    name: { $regex: search, $options: 'i' },
+    price: { $gte: minPrice }
   }
 
   if (categoryId) filterQuery.category = categoryId
   if (brandId) filterQuery.category = brandId
+  if (maxPrice) filterQuery.price['$lte'] = maxPrice
 
   const record = await Product.find(filterQuery)
     .populate('brand')
