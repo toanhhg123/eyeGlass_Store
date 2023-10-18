@@ -59,7 +59,7 @@ export const TableOrder = (props) => {
                       <Chip
                         variant="outlined"
                         color="secondary"
-                        label={order.shipping.status}
+                        label={order?.shipping?.status}
                       ></Chip>
                     </TableCell>
 

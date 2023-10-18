@@ -7,7 +7,7 @@ import Product from '~/product/product.model'
 export const create = async (req: Request<unknown, unknown, OrderDocument>, res: Response) => {
   const { _id } = req.user
 
-  const { product, quantity } = req.body
+  const { product, quantity, status } = req.body
 
   const productDb = await Product.findById(product)
 
@@ -15,7 +15,7 @@ export const create = async (req: Request<unknown, unknown, OrderDocument>, res:
     throw new Error('đơn hàng hiện tại đang hết ')
   }
 
-  productDb.quantity = productDb.quantity - quantity
+  if (status === 'ordered') productDb.quantity = productDb.quantity - quantity
 
   const record = new Order({
     ...req.body,
@@ -68,7 +68,18 @@ export const getAll = async (req: Request<unknown, unknown, OrderDocument>, res:
 export const update = async (req: Request<{ id: string }, unknown, OrderDocument>, res: Response) => {
   const record = await Order.findByIdAndUpdate(req.params.id, req.body)
 
-  console.log(record)
+  if (record) {
+    const { status, quantity } = req.body
+    const product = await Product.findById(record.product)
+
+    if (!product) throw new Error('không tìm thấy sản phẩm')
+    if (product.quantity < quantity) throw new Error(`đơn hàng chỉ còn ${product.quantity} `)
+
+    if (status === 'ordered') product.quantity = product.quantity - quantity
+    if (status === 'cancel') product.quantity = product.quantity + record.quantity
+
+    await product.save()
+  }
   return res.status(200).json(successResponse(record))
 }
 

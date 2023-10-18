@@ -9,7 +9,7 @@ export const login = async (req: Request<unknown, unknown, UserLogin>, res: Resp
   const { user_name, password } = req.body
   const user = await User.findOne({ user_name: user_name })
 
-  if (!user) throw new HttpException(400, 'tên đăng nhập không chín xác')
+  if (!user) throw new HttpException(400, 'tên đăng nhập không chính xác')
 
   if (!(await user.comparePassword(password))) throw new HttpException(400, 'Mật khẩu không chính xác')
 

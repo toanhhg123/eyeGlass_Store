@@ -9,9 +9,11 @@ import orderRouter from '~/order/order.route'
 import blogRouter from '~/blog/blog.route'
 
 import seederRouter from '~/seeders'
+import { report } from '~/report/report.controller'
 
 const router = express.Router()
 
+router.get('/report', report)
 router.use('/user', userRouter)
 router.use('/auth', authRouter)
 router.use('/category', categoryRouter)
