@@ -11,3 +11,7 @@ export const createBrand = (Brand) => {
 export const updateBrand = (id, Brand) => {
   return api.patch(`/Brand/${id}`, Brand);
 };
+
+export const deleteBrand = (id) => {
+  return api.delete(`/Brand/${id}`);
+};

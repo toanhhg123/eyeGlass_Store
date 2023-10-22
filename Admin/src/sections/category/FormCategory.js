@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { useCallback, useState } from "react";
 import useFetch from "src/hooks/useFetch";
-import { createCategory, updateCategory } from "src/services/category.service";
+import { createCategory, updateCategory, deleteCategory } from "src/services/category.service";
 
 const FormCategory = ({ brand, onSubmitSuccess, type }) => {
   const [values, setValues] = useState(brand);
@@ -52,7 +52,7 @@ const FormCategory = ({ brand, onSubmitSuccess, type }) => {
 
   const handleDelete = useCallback(
     async (id) => {
-      const res = "1";
+      const res = deleteCategory(id);
       if (res) {
         setSnackBar({
           type: "success",

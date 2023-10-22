@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { useCallback, useState } from "react";
 import useFetch from "src/hooks/useFetch";
-import { createBrand, updateBrand } from "src/services/brand.service";
+import { createBrand, updateBrand, deleteBrand } from "src/services/brand.service";
 
 const FormBrand = ({ brand, onSubmitSuccess, type }) => {
   const [values, setValues] = useState(brand);
@@ -52,7 +52,7 @@ const FormBrand = ({ brand, onSubmitSuccess, type }) => {
 
   const handleDelete = useCallback(
     async (id) => {
-      const res = "1";
+      const res = deleteBrand(id);
       if (res) {
         setSnackBar({
           type: "success",

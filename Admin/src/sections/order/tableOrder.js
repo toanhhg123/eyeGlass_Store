@@ -46,8 +46,8 @@ export const TableOrder = (props) => {
                   <TableRow hover key={order._id}>
                     <TableCell>
                       <Stack alignItems="center" direction="row" spacing={2}>
-                        <Avatar src={order.product.images[0]}>{order.product.name}</Avatar>
-                        <Typography variant="subtitle2">{order.product.name}</Typography>
+                        <Avatar src={order?.product?.images[0]}>{order?.product?.name}</Avatar>
+                        <Typography variant="subtitle2">{order?.product?.name}</Typography>
                       </Stack>
                     </TableCell>
                     <TableCell>{order.user.user_name}</TableCell>

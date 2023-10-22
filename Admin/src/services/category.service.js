@@ -11,3 +11,7 @@ export const createCategory = (Category) => {
 export const updateCategory = (id, Category) => {
   return api.patch(`/Category/${id}`, Category);
 };
+
+export const deleteCategory = (id) => {
+  return api.delete(`/Category/${id}`);
+};
