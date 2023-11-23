@@ -115,6 +115,7 @@ const FormUser = ({ user, onSubmitSuccess, type }) => {
                         >
                           <MenuItem value={"user"}>User</MenuItem>
                           <MenuItem value={"admin"}>Admin</MenuItem>
+                          <MenuItem value={"employee"}>employee</MenuItem>
                         </Select>
                       </FormControl>
                     </Grid>

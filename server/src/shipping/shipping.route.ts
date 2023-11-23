@@ -1,13 +1,13 @@
 import express from 'express'
-import { create, getAll, remove, update } from './shipping.controller'
-import { authMiddleware, isAdmin } from '~/middleware/auth.middleware'
 import 'express-async-errors'
+import { authMiddleware, isEmployeeOrAdmin } from '~/middleware/auth.middleware'
+import { create, getAll, remove, update } from './shipping.controller'
 
 const router = express.Router()
 
 router.get('/', getAll)
 
-router.use([authMiddleware, isAdmin])
+router.use([authMiddleware, isEmployeeOrAdmin])
 
 router.post('/', create)
 router.patch('/:id', update)

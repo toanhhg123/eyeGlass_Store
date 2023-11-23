@@ -7,7 +7,7 @@ export interface UserDocument extends Document {
   email: string
   password: string
   address?: string
-  role: 'admin' | 'user'
+  role: 'admin' | 'user' | 'employee'
   comparePassword: (password: string) => Promise<boolean>
 }
 
@@ -32,7 +32,7 @@ const userSchema = new Schema<UserDocument>({
   },
   role: {
     type: String,
-    enum: ['admin', 'user'],
+    enum: ['admin', 'user', 'employee'],
     default: 'user'
   }
 })

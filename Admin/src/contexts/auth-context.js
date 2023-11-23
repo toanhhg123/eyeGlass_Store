@@ -122,8 +122,8 @@ export const AuthProvider = (props) => {
   const signIn = async (user_name, password) => {
     const { data } = await login({ user_name, password });
     console.log(data);
-    if (data.data.user.role !== "admin")
-      throw new Error("vui lòng đăng nhập với tài khoản quản trị!!");
+    if (!["admin", "employee"].includes(data?.data?.user?.role))
+      throw new Error("vui lòng đăng nhập với tài khoản quản trị hoặc nhân viên!!");
 
     try {
       localStorage.setItem("authenticated", JSON.stringify(data));

@@ -21,3 +21,13 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
   if (req.user.role !== 'admin') throw new HttpException(403, 'forbbiden')
   return next()
 }
+
+export const isEmployee = (req: Request, res: Response, next: NextFunction) => {
+  if (req.user.role !== 'employee') throw new HttpException(403, 'forbbiden')
+  return next()
+}
+
+export const isEmployeeOrAdmin = (req: Request, res: Response, next: NextFunction) => {
+  if (!['employee', 'admin'].includes(req.user.role)) throw new HttpException(403, 'forbbiden')
+  return next()
+}
